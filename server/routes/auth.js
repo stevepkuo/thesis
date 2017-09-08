@@ -41,7 +41,7 @@ router.route('/signup')
 /** ROUTE USED TO RETRIEVE AND SEND USER DATA BACK TO CLIENT **/
 router.route('/profile')
   .get(middleware.auth.verify, (req, res) => {
-    res.send(req.user[0]);
+    res.send(req.user);
   });
 
 router.route('/logout')
