@@ -122,7 +122,7 @@ describe('CRUD API', function () {
         return agent.get('/api/boards');
       })
       .then((res) => {
-        expect(res.status).to.equal(500);
+        expect(res.status).to.equal(200);
         done();
       })
       .catch((err) => {
