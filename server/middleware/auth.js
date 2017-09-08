@@ -2,6 +2,7 @@ const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const redisClient = require('redis').createClient();
 const models = require('../../db/models');
+const dbhelper = require('../../db/helpers.js');
 
 //for testing purposes to set up a fake login session
 module.exports.fakemiddleware = (req, res, next) => {
@@ -45,12 +46,12 @@ module.exports.verifyBoardMemberElse401 = (req, res, next) => {
   // })
 
   //see whether the boardid shows up under any of the users boards
-  return models.User.where({ id: userId }).fetch()
-    .then(function(user) {
-      return user.related('memberOfBoards').fetch();
-    })
+  dbhelper.getBoardsByUser(userId)
     .then(boards => {
-      return boards.toJSON().filter((eachBoard) => {
+      if (!boards) {
+        throw 'user doesnt have any boards';
+      }
+      return boards.filter((eachBoard) => {
         return eachBoard.id === boardid;
       });
     })
@@ -58,11 +59,15 @@ module.exports.verifyBoardMemberElse401 = (req, res, next) => {
     .then(function(results) {
       if (results.length === 0) {
         res.status(401).send();
+      } else {
+        return next();
       }
-      return next();
     })
     .error(err => {
       res.status(500).send();
+    })
+    .catch(err => {
+      res.status(404).send(JSON.stringify(err));
     });
 };
 
@@ -78,18 +83,25 @@ module.exports.verifyBoardOwnerElse401 = (req, res, next) => {
   }
   var userId = req.user.id;
   //see whether the boardid's shows up under any of the users boards
-  return models.Board.where({ id: boardid }).fetch()
+  dbhelper.getBoardById(boardid)
     .then(function(board) {
-      return board.toJSON().owner_id === userId;
+      if (!board) {
+        throw board;
+      }
+      return board.owner_id === userId;
     })
     .then(ownsBoard => {
       if (!ownsBoard) {
         res.status(401).send();
+      } else {
+        return next();
       }
-      return next();
     })
     .error(err => {
       res.status(500).send();
+    })
+    .catch(err => {
+      res.status(404).send(JSON.stringify(err));
     });
 };
 

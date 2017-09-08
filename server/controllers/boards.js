@@ -15,7 +15,7 @@ module.exports.getUserOwnedBoards = (req, res) => {
     })
     .catch(err => {
       // This code indicates an outside service (the database) did not respond in time
-      res.status(500).send(err);
+      res.status(500).send(JSON.stringify(err));
     });
 };
 
@@ -29,7 +29,7 @@ module.exports.getMyBoards = (req, res) => {
       res.status(200).send(boards);
     })
     .catch((err) => {
-      res.status(500).send(err);
+      res.status(500).send(JSON.stringify(err));
     });
 };
 
@@ -59,10 +59,7 @@ module.exports.createMyBoard = (req, res) => {
       res.status(201).send(createdBoard);
     })
     .catch(err => {
-      if (err.constraint.includes('unique')) {
-        return res.status(403);
-      }
-      res.status(500).send(err);
+      res.status(500).send(JSON.stringify(err));
     });
 };
 
@@ -79,7 +76,7 @@ module.exports.getOneBoard = (req, res) => {
       res.status(200).send(board);
     })
     .catch((err) => {
-      res.status(500).send(err);
+      res.status(500).send(JSON.stringify(err));
     });
 };
 
@@ -114,7 +111,7 @@ module.exports.updateBoard = (req, res) => {
       res.sendStatus(201);
     })
     .catch((err) => {
-      res.status(500).send(err);
+      res.status(500).send(JSON.stringify(err));
     });
 };
 
@@ -131,7 +128,7 @@ module.exports.getUsersByBoard = (req, res) => {
       res.sendStatus(200);
     })
     .catch((err) => {
-      res.status(500).send(err);
+      res.status(500).send(JSON.stringify(err));
     });
 };
 
@@ -149,9 +146,6 @@ module.exports.addMember = (req, res) => {
       res.status(201).send(member);
     })
     .catch(err => {
-      if (err.constraint.includes('unique')) {
-        return res.status(403);
-      }
-      res.status(500).send(err);
+      res.status(500).send(JSON.stringify(err));
     });
 };

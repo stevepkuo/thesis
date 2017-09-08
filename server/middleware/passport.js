@@ -56,10 +56,11 @@ const getOrCreateGithubOAuthProfile = (type, oauthProfile, done) => {
       return models.User.forge(profileInfo).save();
     })
     .then(profile => {
-      if (profile) {
-        console.log('Saved user profile');
-        done(null, profile.serialize());
+      if (!profile) {
+        throw JSON.stringify(profile);
       }
+      console.log('Saved user profile');
+      done(null, profile.serialize());
     })
     .catch((err) => {
       console.log('Not saved user profile');

@@ -74,7 +74,7 @@ describe('CRUD API', function () {
       });
   });
 
-  it('rejects unauthorized get requests to /api/boards that user isnt a member of', function(done) {
+  it('rejects unauthorized get requests to /api/boards/:id that user isnt a member of', function(done) {
     agent.get('/auth/fake')
       .then((res) => {
         return agent.get('/api/boards/2');
