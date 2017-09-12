@@ -1147,9 +1147,8 @@ describe('CRUD API tickets', function () {
         expect(res.status).to.equal(200);
         expect(res.body.length).to.equal(3);
         expect(res.body[0].title).to.equal('testticket3C'); //priority 3, in progress
-        expect(res.body[1].title).to.equal('newticketname');
-        expect(res.body[2].title).to.equal('testticket3B'); //priority 2, in progress
-        expect(res.body[3].title).to.equal('testticket3A'); //priority 2, complete
+        expect(res.body[1].title).to.equal('newticketname'); //priority 2, in progress
+        expect(res.body[2].title).to.equal('testticket3A'); //priority 2, complete
         done();
       })
       .catch((err) => {
