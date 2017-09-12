@@ -30,7 +30,7 @@ module.exports.createPanelTicket = (req, res) => {
     req.body.priority,
     req.body.type,
     req.body.creator_id,
-    req.body.assignee_id,
+    req.body.assignee_handle,
     req.body.board_id,
     req.body.panel_id
   )) {
@@ -48,7 +48,7 @@ module.exports.createPanelTicket = (req, res) => {
     priority: req.body.priority,
     type: req.body.type,
     creator_id: req.user.id,
-    assignee_id: req.body.assignee_id,
+    assignee_handle: req.body.assignee_handle,
     board_id: req.body.board_id,
     panel_id: req.body.panel_id
   };
@@ -96,7 +96,7 @@ module.exports.updateTicket = (req, res) => {
     'priority': true,
     'type': true,
     'creator_id': true,
-    'assignee_id': true,
+    'assignee_handle': true,
     'board_id': true,
     'panel_id': true
   };

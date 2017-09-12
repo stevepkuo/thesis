@@ -965,13 +965,12 @@ describe('CRUD API tickets', function () {
             priority: '4',
             type: 'feature',
             creator_id: 3,
-            assignee_id: 3,
+            assignee_handle: 'dsc03',
             board_id: 3,
             panel_id: 3
           });
       })
       .then((res) => {
-        console.log(res.body);
         expect(res.status).to.equal(201);
         expect(res.body.title).to.equal('newticket');
         expect(!!res.body.created_at).to.equal(true);
@@ -979,7 +978,6 @@ describe('CRUD API tickets', function () {
           .query({panel_id: 3});
       })
       .then((res) => {
-        console.log(res.body);
         expect(res.status).to.equal(200);
         expect(res.body.length).to.equal(4);
         expect(res.body[0].title).to.equal('newticket');
@@ -1004,7 +1002,7 @@ describe('CRUD API tickets', function () {
             priority: '1',
             type: 'feature',
             creator_id: 3,
-            assignee_id: 3,
+            assignee_handle: 'dsc03',
             board_id: 3,
             panel_id: 3
           });
@@ -1043,7 +1041,7 @@ describe('CRUD API tickets', function () {
             priority: '1',
             type: 'feature',
             creator_id: 2,
-            assignee_id: 2,
+            assignee_handle: 'stevepkuo2',
             board_id: 2,
             panel_id: 5
           });
@@ -1076,7 +1074,7 @@ describe('CRUD API tickets', function () {
             priority: '1',
             type: 'feature',
             creator_id: 3,
-            assignee_id: 3,
+            assignee_handle: 'dsc03',
             board_id: 3,
             panel_id: 3
           });
@@ -1108,7 +1106,7 @@ describe('CRUD API tickets', function () {
             priority: '1',
             type: 'feature',
             creator_id: 3,
-            assignee_id: 3,
+            assignee_handle: 'dsc03',
             board_id: 3,
             panel_id: 200
           });
@@ -1134,7 +1132,7 @@ describe('CRUD API tickets', function () {
             priority: '2',
             type: 'feature',
             creator_id: 3,
-            assignee_id: 3,
+            assignee_handle: 'dsc03',
             board_id: 3,
             panel_id: 3
           });
@@ -1149,8 +1147,8 @@ describe('CRUD API tickets', function () {
         expect(res.status).to.equal(200);
         expect(res.body.length).to.equal(3);
         expect(res.body[0].title).to.equal('testticket3C'); //priority 3, in progress
-        expect(res.body[1].title).to.equal('testticket3B'); //priority 2, in progress
-        expect(res.body[2].title).to.equal('newticketname');
+        expect(res.body[1].title).to.equal('newticketname');
+        expect(res.body[2].title).to.equal('testticket3B'); //priority 2, in progress
         expect(res.body[3].title).to.equal('testticket3A'); //priority 2, complete
         done();
       })
