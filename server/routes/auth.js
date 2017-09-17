@@ -31,6 +31,15 @@ if (process.env.NODE_ENV === 'test') {
     'oauth_id': '25214199',
     'lastboard_id': null
   };
+  var fakeUser4 = {
+    'id': 4,
+    'email': 'newnew@aol.com',
+    'github_handle': 'newnew@aol.com',
+    'profile_photo': null,
+    'oauth_id': null,
+    'lastboard_id': null,
+    'verified': 0
+  };
   router.use(middleware.auth.fakemiddleware);
   router.route('/auth/fake')
     .get((req, res) => {
@@ -73,7 +82,7 @@ router.route('/signup')
 /** ROUTE USED TO RETRIEVE AND UPDATE USER DATA AND SEND BACK TO CLIENT **/
 router.route('/profile')
   .get(middleware.auth.verifyElse401, (req, res) => {
-    dbhelper.getUserById(parseInt(req.user.id))
+    dbhelper.getUserByIdUnhidden(parseInt(req.user.id))
       .then(user => {
         if (!user) {
           throw user;
@@ -127,6 +136,40 @@ router.route('/profile')
         res.status(500).send(JSON.stringify(err));
       });
 
+  });
+
+/** ROUTE USED TO RETRIEVE USER INVITES SEND BACK TO CLIENT **/
+router.route('/profile/invitations')
+  .get(middleware.auth.verifyElse401, (req, res) => {
+    dbhelper.getInvitesByUser(parseInt(req.user.id))
+      .then(invites => {
+        if (!invites) {
+          throw invites;
+        }
+        res.status(200).send(invites);
+      })
+      .catch((err) => {
+        res.status(500).send(JSON.stringify(err));
+      });
+  });
+
+/** ROUTE TO SERVE UP PROFILE PAGE ALONG WITH INVITATIONS**/
+router.route('/myprofile')
+  .get(middleware.auth.verifyElse401, (req, res) => {
+    //get my invitations and display them
+    dbhelper.getInvitesByUser(parseInt(req.user.id))
+      .then(invites => {
+        if (!invites) {
+          throw invites;
+        }
+        res.render('profile.ejs', {
+          user: req.user, // get the user out of session and pass to template
+          invites: invites //pass in the boards that user is invited to
+        });
+      })
+      .catch((err) => {
+        res.status(500).send(JSONstringify(err));
+      });
   });
 
 router.route('/logout')

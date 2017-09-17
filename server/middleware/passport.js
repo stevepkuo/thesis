@@ -4,6 +4,7 @@ const GithubStrategy = require('passport-github').Strategy;
 
 const config = require('config')['passport'];
 const models = require('../../db/models');
+const crypto = require('crypto');
 
 passport.serializeUser((profile, done) => {
   done(null, profile);
@@ -23,7 +24,7 @@ passport.use('github', new GithubStrategy({
 );
 
 const getOrCreateGithubOAuthProfile = (type, oauthProfile, done) => {
-  return models.User.where({ oauth_id: oauthProfile.id }).fetch()
+  return models.User.where({ github_handle: oauthProfile.username }).fetch()
     .then(oauthAccount => {
 
       //check if Auth table already has user
@@ -52,13 +53,16 @@ const getOrCreateGithubOAuthProfile = (type, oauthProfile, done) => {
         //update profile with info from oauthProfile
         return oauthAccount.save(profileInfo, { method: 'update' });
       }
-      //otherwise create new profile
+      //otherwise create new profile /** TEMPORARY WAY FOR CREATING API_KEY CHECK API_KEY UNIQUE**/
+      let buf = crypto.randomBytes(256);
+      profileInfo.api_key = buf.toString('hex').slice(0, 64);
       return models.User.forge(profileInfo).save();
     })
     .then(profile => {
       if (!profile) {
         throw JSON.stringify(profile);
       }
+      delete profile.api_key;
       console.log('Saved user profile');
       done(null, profile.serialize());
     })
