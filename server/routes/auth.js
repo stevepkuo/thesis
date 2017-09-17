@@ -43,6 +43,15 @@ if (process.env.NODE_ENV === 'test') {
     'lastboard_id': null,
     'verified': 0
   };
+  var fakeUser4 = {
+    'id': 4,
+    'email': 'newnew@aol.com',
+    'github_handle': 'newnew@aol.com',
+    'profile_photo': null,
+    'oauth_id': null,
+    'lastboard_id': null,
+    'verified': 0
+  };
   router.use(middleware.auth.fakemiddleware);
   router.route('/auth/fake')
     .get((req, res) => {
@@ -156,32 +165,35 @@ router.route('/profile/invitations')
       });
   });
 
-/** ROUTE TO SERVE UP PROFILE PAGE ALONG WITH INVITATIONS**/
-router.route('/myprofile')
-  .get(middleware.auth.verifyElse401, (req, res) => {
-    var user;
-    dbhelper.getUserByIdUnhidden(parseInt(req.user.id))
-      .then(userUnhidden => {
-        if (!userUnhidden) {
-          throw userUnhidden;
-        }
-        user = userUnhidden;
-        //get my invitations and display them
-        return dbhelper.getInvitesByUser(parseInt(req.user.id));
-      })
-      .then(invites => {
-        if (!invites) {
-          throw invites;
-        }
-        res.render('profile.ejs', {
-          user: user, // get the user with api key from dbhelper and pass to template
-          invites: invites //pass in the boards that user is invited to
-        });
-      })
-      .catch((err) => {
-        res.status(500).send(JSONstringify(err));
-      });
-  });
+ /** ROUTE TO SERVE UP PROFILE PAGE **/
+ router.route('/myprofile')
+   .get(middleware.auth.verifyElse401, (req, res) => {
+     var user;
+     //Get unhidden info about user including api_key
+     dbhelper.getUserByIdUnhidden(parseInt(req.user.id))
+       .then(userUnhidden => {
+         if (!userUnhidden) {
+           throw userUnhidden;
+         }
+         user = userUnhidden;
+         //get my invitations and display them
+         //THIS MIGHT BE DEPRECATED, SINCE MEMBERS ARE AUTO-ADDED TO BOARDS
+         //INVITES WILL BE AUTO CLEARED BY EMAIL NOTIFICATION WORKER IN THE BACKGROUND
+         return dbhelper.getInvitesByUser(parseInt(req.user.id));
+       })
+       .then(invites => {
+         if (!invites) {
+           throw invites;
+         }
+         res.render('profile.ejs', {
+           user: user, // get the user with api key from dbhelper and pass to template
+           invites: invites //pass in the boards that user is invited to
+         });
+       })
+       .catch((err) => {
+         res.status(500).send(JSONstringify(err));
+       });
+   });
 
 router.route('/logout')
   .get((req, res) => {
