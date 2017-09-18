@@ -88,7 +88,7 @@ module.exports.getUserByApiKey = function(apiKey) {
       if (!user) {
         throw 'invalid user';
       }
-      return user.toJSON();
+      return user.toJSON({hidden: []});
     })
     .catch(situation => {
       console.log(`There is a situation: user API key does not exist!`);
