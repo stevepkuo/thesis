@@ -159,7 +159,7 @@ router.route('/myprofile')
     var user;
     dbhelper.getUserByIdUnhidden(parseInt(req.user.id))
       .then(userUnhidden => {
-        if (!userUnhidden){
+        if (!userUnhidden) {
           throw userUnhidden;
         }
         user = userUnhidden;
