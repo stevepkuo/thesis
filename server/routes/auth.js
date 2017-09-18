@@ -156,14 +156,22 @@ router.route('/profile/invitations')
 /** ROUTE TO SERVE UP PROFILE PAGE ALONG WITH INVITATIONS**/
 router.route('/myprofile')
   .get(middleware.auth.verifyElse401, (req, res) => {
-    //get my invitations and display them
-    dbhelper.getInvitesByUser(parseInt(req.user.id))
+    var user;
+    dbhelper.getUserByIdUnhidden(parseInt(req.user.id))
+      .then(userUnhidden => {
+        if (!userUnhidden){
+          throw userUnhidden;
+        }
+        user = userUnhidden;
+        //get my invitations and display them
+        return dbhelper.getInvitesByUser(parseInt(req.user.id));
+      })
       .then(invites => {
         if (!invites) {
           throw invites;
         }
         res.render('profile.ejs', {
-          user: req.user, // get the user out of session and pass to template
+          user: user, // get the user with api key from dbhelper and pass to template
           invites: invites //pass in the boards that user is invited to
         });
       })
