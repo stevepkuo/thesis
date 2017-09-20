@@ -18,7 +18,7 @@ exports.notifyworker = function() {
       results.forEach((eachUser, index) => {
         console.log('eachUser', eachUser);
         console.log('eachUser message', emailMessages[index]);
-        emailPromises.push(emailhelper.sendMail(eachUser.email, emailMessages[index]));
+        emailPromises.push(emailhelper.sendMail(eachUser.email, emailMessages[index]), `http://localhost:3000/`);
       });
       return Promise.all(emailPromises);
     })
@@ -54,7 +54,7 @@ exports.inviteworker = function() {
         console.log('eachUser', eachUser);
         console.log('eachUser email', eachUser.email);
         console.log('eachUser message', emailMessages[index]);
-        emailPromises.push(emailhelper.sendMail(eachUser.email, emailMessages[index]));
+        emailPromises.push(emailhelper.sendMail(eachUser.email, emailMessages[index].message, emailMessages[index].inviteURL));
       });
       return Promise.all(emailPromises);
     })

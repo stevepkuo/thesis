@@ -5,9 +5,12 @@
     }
   },
 
-  "mailgun": {
-    "postmaster": "FILL_ME_IN",
-    "domainpassword": "FILL_ME_IN" 
+  "gmail": {
+    "client_user": "FILL_ME_IN",
+    "clientId": "FILL_ME_IN",
+    "clientsecret": "FILL_ME_IN",
+    "refreshtoken": "FILL_ME_IN",
+    "accesstoken": "FILL_ME_IN"
   },
 
   "passport": {
