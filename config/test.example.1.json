@@ -5,6 +5,11 @@
     }
   },
 
+  "mailgun": {
+    "postmaster": "FILL_ME_IN",
+    "domainpassword": "FILL_ME_IN" 
+  },
+
   "passport": {
     "Google": {
       "clientID": "FILL_ME_IN",

@@ -21,6 +21,8 @@
     }
   },
 
+  "mailgun": {},
+
   "passport": {
     "Google": {},
     "Facebook": {},

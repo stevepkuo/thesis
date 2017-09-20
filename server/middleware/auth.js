@@ -83,11 +83,6 @@ module.exports.verifyBoardMemberElse401 = (req, res, next) => {
   }
   var userId = req.user ? req.user.id : req.query.user_id;
 
-  // return models.User.where({ id: userId }).fetch({withRelated:['memberOfBoards']})
-  // .then(function(user) {
-  //   return user.related('memberOfBoards');
-  // })
-
   //see whether the boardid shows up under any of the users boards
   dbhelper.getBoardsByUser(parseInt(userId))
     .then(boards => {
